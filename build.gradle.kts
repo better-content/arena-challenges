@@ -90,10 +90,11 @@ tasks.register("headlessGameTest") {
 }
 tasks.register("verifyFull") { dependsOn("verifyFast", "headlessGameTest") }
 
+val runtimeArtifactName = "arena-challenges-${project.version}.jar"
 val stageRuntimeJar by tasks.registering(Copy::class) {
     dependsOn("reobfJar")
     from(layout.buildDirectory.file("reobfJar/output.jar"))
     into(layout.buildDirectory.dir("libs"))
-    rename { "arena-challenges-${property("mod_version")}.jar" }
+    rename { runtimeArtifactName }
 }
 tasks.named("assemble") { dependsOn(stageRuntimeJar) }
