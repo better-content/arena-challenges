@@ -1,0 +1,8 @@
+{
+  "block.arena_challenges.arena_totem": "Arena Totem",
+  "container.arena_challenges.totem": "Arena Challenge",
+  "item.arena_challenges.champion_blade": "Champion's Blade",
+  "item.arena_challenges.warden_axe": "Warden's Axe",
+  "item.arena_challenges.duelist_sigil": "Duelist's Sigil",
+  "item.arena_challenges.duelist_sigil.desc": "Right-click for Strength II for 30 seconds. Recharges in 5 minutes."
+}
