@@ -8,7 +8,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -47,21 +46,19 @@ public final class ArenaStructurePiece extends StructurePiece {
                 if (!box.isInside(x, center.getY(), z)) continue;
                 int ground = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z) - 1;
                 for (int foundationY = ground + 1; foundationY < center.getY(); foundationY++) {
-                    if (box.isInside(x, foundationY, z)) {
-                        pos.set(x, foundationY, z);
-                        level.setBlock(pos, Blocks.STONE.defaultBlockState(), 2);
-                    }
+                    pos.set(x, foundationY, z);
+                    setBlockIfInside(level, box, pos, Blocks.STONE.defaultBlockState());
                 }
                 pos.set(x, center.getY(), z);
-                level.setBlock(pos, floor, 2);
+                setBlockIfInside(level, box, pos, floor);
                 for (int dy = 1; dy <= 5; dy++) {
                     pos.set(x, center.getY() + dy, z);
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+                    setBlockIfInside(level, box, pos, Blocks.AIR.defaultBlockState());
                 }
                 if (Math.abs(x - center.getX()) == RADIUS || Math.abs(z - center.getZ()) == RADIUS) {
                     for (int dy = 1; dy <= 3; dy++) {
                         pos.set(x, center.getY() + dy, z);
-                        level.setBlock(pos, boundary, 2);
+                        setBlockIfInside(level, box, pos, boundary);
                     }
                 }
             }
@@ -69,20 +66,26 @@ public final class ArenaStructurePiece extends StructurePiece {
         for (int dx : new int[]{-8, 8}) {
             for (int dz : new int[]{-8, 8}) {
                 pos.set(center.getX() + dx, center.getY(), center.getZ() + dz);
-                level.setBlock(pos, pillar, 2);
+                setBlockIfInside(level, box, pos, pillar);
                 for (int dy = 1; dy <= 3; dy++) {
                     pos.set(center.getX() + dx, center.getY() + dy, center.getZ() + dz);
-                    level.setBlock(pos, Blocks.CRYING_OBSIDIAN.defaultBlockState(), 2);
+                    setBlockIfInside(level, box, pos, Blocks.CRYING_OBSIDIAN.defaultBlockState());
                 }
             }
         }
         pos.set(center.getX(), center.getY(), center.getZ());
-        level.setBlock(pos, ArenaBlocks.ARENA_TOTEM.get().defaultBlockState(), 2);
+        setBlockIfInside(level, box, pos, ArenaBlocks.ARENA_TOTEM.get().defaultBlockState());
         for (int dx : new int[]{-6, 6}) {
             pos.set(center.getX() + dx, center.getY(), center.getZ());
-            level.setBlock(pos, Blocks.POLISHED_BLACKSTONE.defaultBlockState(), 2);
+            setBlockIfInside(level, box, pos, Blocks.POLISHED_BLACKSTONE.defaultBlockState());
             pos.set(center.getX() + dx, center.getY() + 1, center.getZ());
-            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+            setBlockIfInside(level, box, pos, Blocks.AIR.defaultBlockState());
+        }
+    }
+
+    private static void setBlockIfInside(WorldGenLevel level, BoundingBox box, BlockPos pos, BlockState state) {
+        if (box.isInside(pos)) {
+            level.setBlock(pos, state, 2);
         }
     }
 }
